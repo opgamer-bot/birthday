@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --burgundy: #6B1A2A;
+  --deep-red: #8B2535;
+  --kraft: #C8A97A;
+  --kraft-light: #DEC49A;
+  --kraft-dark: #A8865A;
+  --cream: #F5EDD8;
+  --warm-white: #FDF6EC;
+  --gold: #C9963A;
+  --text-dark: #2A1018;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--burgundy);
+  font-family: 'Cormorant Garamond', serif;
+  min-height: 100vh;
+  overflow: hidden;
+  cursor: default;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(139,37,53,0.4) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(107,26,42,0.6) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating hearts */
+.hearts-bg { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.heart-float {
+  position: absolute;
+  color: rgba(200, 169, 122, 0.15);
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0%   { transform: translateY(100vh) rotate(0deg);   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+}
+
+/* Pages */
+.page {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10; opacity: 0; pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+.page.active { opacity: 1; pointer-events: all; }
+
+/* PAGE 1 - ENVELOPE */
+#page-envelope .envelope-wrapper {
+  display: flex; flex-direction: column; align-items: center; gap: 2rem;
+}
+#page-envelope .tagline {
+  font-family: 'Dancing Script', cursive;
+  color: var(--kraft-light); font-size: 1.4rem;
+  letter-spacing: 0.05em; opacity: 0;
+  animation: fadeInDown 1s ease 0.5s forwards;
+}
+.real-envelope{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+
+  filter: drop-shadow(0 15px 35px rgba(0,0,0,0.45));
+
+  transition: transform 0.4s ease;
+}
+
+.envelope-scene:hover .real-envelope{
+  transform: translateY(-8px) scale(1.02);
+}
+.envelope-scene:hover .envelope-body {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+.envelope-body {
+  width: 100%; height: 100%; background: var(--kraft);
+  border-radius: 4px; position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4); overflow: hidden;
+}
+.envelope-body::before {
+  content: ''; position: absolute; inset: 0;
+  background: repeating-linear-gradient(45deg, transparent, transparent 2px,
+    rgba(168,134,90,0.2) 2px, rgba(168,134,90,0.2) 4px);
+}
+.env-hearts { position: absolute; inset: 0; pointer-events: none; }
+.env-heart  { position: absolute; color: var(--burgundy); font-size: 0.75rem; opacity: 0.7; }
+
+.envelope-flap {
+  position: absolute; top: 0; left: 0; right: 0; height: 0;
+  border-left: 160px solid transparent;
+  border-right: 160px solid transparent;
+  border-top: 110px solid var(--kraft-dark); z-index: 3;
+}
+.envelope-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 0;
+  border-left: 160px solid transparent;
+  border-right: 160px solid transparent;
+  border-bottom: 100px solid var(--kraft-dark); opacity: 0.6;
+}
+.envelope-left {
+  position: absolute; top: 0; left: 0; bottom: 0; height: 0;
+  border-top: 110px solid transparent;
+  border-bottom: 110px solid transparent;
+  border-left: 90px solid rgba(168,134,90,0.3);
+}
+.envelope-right {
+  position: absolute; top: 0; right: 0; bottom: 0; height: 0;
+  border-top: 110px solid transparent;
+  border-bottom: 110px solid transparent;
+  border-right: 90px solid rgba(168,134,90,0.3);
+}
+.wax-seal {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  width: 64px; height: 64px;
+  background: radial-gradient(circle at 35% 35%, #9B2535, #5A0F1A);
+  border-radius: 50%; z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1);
+  transition: transform 0.3s ease;
+}
+.envelope-scene:hover .wax-seal { transform: translateX(-50%) scale(1.05); }
+.wax-seal::before { content: '✿'; color: rgba(255,255,255,0.3); font-size: 1.5rem; }
+.wax-seal::after {
+  content: ''; position: absolute; inset: -3px;
+  border-radius: 50%; border: 2px solid rgba(155,37,53,0.5);
+  animation: sealPulse 2s ease infinite;
+}
+@keyframes sealPulse {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.15); opacity: 0; }
+}
+.click-hint {
+  font-family: 'Dancing Script', cursive; color: var(--kraft-light);
+  font-size: 1rem; letter-spacing: 0.05em;
+  opacity: 0; animation: fadeInUp 1s ease 1.2s forwards, hintPulse 2s ease 2.5s infinite;
+}
+@keyframes hintPulse { 0%,100%{opacity:0.7;} 50%{opacity:0.3;} }
+@keyframes envelopeOpen {
+  0%  { transform: scale(1)    translateY(0);    opacity: 1; }
+  50% { transform: scale(1.05) translateY(-10px); opacity: 0.8; }
+  100%{ transform: scale(0)    translateY(-50px); opacity: 0; }
+}
+.envelope-scene.opening { animation: envelopeOpen 0.8s ease forwards; }
+
+/* PAGE 2 - HAPPY BIRTHDAY */
+#page-birthday .content { text-align: center; position: relative; }
+.birthday-title {
+  font-family: 'Playfair Display', serif; color: var(--kraft-light);
+  font-size: clamp(2.5rem, 8vw, 5rem); font-style: italic; line-height: 1.1;
+  opacity: 0; transform: translateY(30px);
+}
+.birthday-title.animate { animation: slideUp 0.8s ease forwards; }
+.birthday-name {
+  font-family: 'Dancing Script', cursive; color: var(--gold);
+  font-size: clamp(2rem, 6vw, 3.5rem); margin-top: 0.5rem;
+  opacity: 0; transform: translateY(20px);
+}
+.birthday-name.animate { animation: slideUp 0.8s ease 0.3s forwards; }
+.cake-wrapper { margin: 2rem auto; opacity: 0; }
+.cake-wrapper.animate { animation: slideUp 0.8s ease 0.5s forwards; }
+.cake-svg { width: 160px; height: 160px; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.4)); }
+.flame { animation: flicker 0.5s ease infinite alternate; transform-origin: bottom center; }
+.flame:nth-child(2){animation-delay:0.1s;} .flame:nth-child(3){animation-delay:0.2s;}
+@keyframes flicker {
+  from{transform:scaleX(1) scaleY(1) rotate(-2deg);}
+  to  {transform:scaleX(0.9) scaleY(1.1) rotate(2deg);}
+}
+.confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+.confetti-piece {
+  position: absolute; width: 8px; height: 8px; top: -10px;
+  border-radius: 2px; animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0%  { transform: translateY(0)     rotate(0deg);   opacity: 1; }
+  100%{ transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* PAGE 3 - LETTER */
+/* PAGE 3 - LETTER */
+#page-letter{
+  padding:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.letter-paper{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  background:url("/back.jpg") center center/cover no-repeat;
+  overflow:hidden;
+}
+
+/* DATE */
+.letter-date{
+  position:absolute;
+  top:15%;
+  right:16%;
+  color:#6b1a2a;
+  font-size:0.75rem;
+  font-style:italic;
+}
+
+.letter-greeting{
+  position:absolute;
+  top:24%;
+  left:18%;
+
+  font-family:'Dancing Script',cursive;
+  font-size:2rem;
+  color:#7a1832;
+
+  z-index:5;
+}
+
+/* MAIN LETTER */
+.letter-body{
+  position:absolute;
+  top:31%;
+  left:20%;
+  width:58%;
+  height:42%;
+  overflow:hidden;
+
+  color:#2b1a14;
+  font-size:0.78rem;
+  line-height:1.45rem;
+
+  text-align:center;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  gap:0.5rem;
+}
+
+.letter-body p{
+  margin:0;
+}
+
+/* SIGN */
+.letter-sign{
+  position:absolute;
+  bottom:11%;
+  left:42%;
+  width:34%;
+  text-align:center;
+  font-family:'Dancing Script',cursive;
+  color:#7a1832;
+  font-size:1rem;
+}
+
+/* MOBILE FIX */
+@media(max-width:480px){
+
+  .letter-date{
+    top:14%;
+    right:15%;
+    font-size:0.68rem;
+  }
+
+  .letter-greeting{
+    top:28%;
+    left:19%;
+    width:60%;
+    font-size:1.7rem;
+  }
+
+  .letter-body{
+    top:31%;
+    left:20%;
+    width:58%;
+    height:41%;
+
+    font-size:0.63rem;
+    line-height:1.2rem;
+
+    gap:0.35rem;
+  }
+
+  .letter-sign{
+    bottom:10%;
+    left:42%;
+    width:34%;
+    font-size:0.9rem;
+  }
+}
+@media(max-width:480px){
+
+  .letter-date{
+    top:16%;
+    right:17%;
+    font-size:0.72rem;
+  }
+
+  .letter-greeting{
+    top:24%;
+    left:20%;
+    width:55%;
+    font-size:1.8rem;
+  }
+
+  .letter-body{
+    top:35%;
+    left:21%;
+    width:54%;
+    height:35%;
+    font-size:0.74rem;
+    line-height:1.6rem;
+  }
+
+  .letter-sign{
+    bottom:12%;
+    left:43%;
+    width:32%;
+    font-size:1rem;
+  }
+}
+/* PAGE 4 - MUSIC CARDS */
+#page-photos {
+  flex-direction: column; gap: 0.5rem;
+  overflow: hidden; padding-top: 0.8rem;
+}
+.photos-title {
+  font-family: 'Dancing Script', cursive; color: var(--kraft-light);
+  font-size: 1.6rem; text-align: center; opacity: 0; flex-shrink: 0;
+}
+.photos-title.animate { animation: fadeInDown 0.6s ease forwards; }
+.photos-sub {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  color: rgba(222,196,154,0.5); font-size: 0.8rem;
+  letter-spacing: 0.1em; opacity: 0; flex-shrink: 0;
+}
+.photos-sub.animate { animation: fadeInDown 0.6s ease 0.15s forwards; }
+.music-scroll {
+  display: flex; gap: 1rem; overflow-x: auto;
+  padding: 0.8rem 1.5rem 1.2rem; width: 100%;
+  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; flex-shrink: 0;
+}
+.music-scroll::-webkit-scrollbar { display: none; }
+.mcard {
+  flex-shrink: 0; width: 158px;
+  background: linear-gradient(160deg, #F7F2EA, #EDE5D2);
+  border-radius: 18px; padding: 0.75rem 0.72rem 0.72rem;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.45), 0 4px 10px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+  scroll-snap-align: center; opacity: 0;
+  transform: translateY(35px) scale(0.92);
+  position: relative; cursor: pointer; transition: box-shadow 0.2s ease;
+}
+.mcard.animate { animation: mcardPop 0.55s cubic-bezier(0.2,1.3,0.4,1) forwards; }
+@keyframes mcardPop { to { opacity: 1; transform: translateY(0) scale(1); } }
+.mcard:active { transform: scale(0.97); }
+.mcard.playing {
+  box-shadow: 0 15px 40px rgba(0,0,0,0.45),
+    0 0 0 1.5px rgba(139,37,53,0.5),
+    0 0 22px rgba(107,26,42,0.4);
+}
+.mc-photo {
+  width: 100%; aspect-ratio: 3/4; border-radius: 11px; overflow: hidden;
+  background: linear-gradient(135deg, var(--burgundy), #3A0818);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem; position: relative; margin-bottom: 0.52rem;
+}
+.mc-photo img { width:100%; height:100%; object-fit:cover; border-radius:11px; }
+.mc-photo::after {
+  content:''; position:absolute; inset:0; border-radius:11px;
+  background: linear-gradient(to top, rgba(20,5,10,0.45) 0%, transparent 50%);
+  pointer-events: none;
+}
+.mc-bars {
+  position:absolute; bottom:10px; right:10px;
+  display:flex; align-items:flex-end; gap:2px; height:18px;
+  opacity:0; transition:opacity 0.3s; z-index:2;
+}
+.mcard.playing .mc-bars { opacity: 1; }
+.mc-bar { width:3px; background:rgba(255,255,255,0.9); border-radius:2px; height:5px; }
+.mcard.playing .mc-bar:nth-child(1){animation:barB 0.5s ease infinite alternate;}
+.mcard.playing .mc-bar:nth-child(2){animation:barB 0.5s ease 0.1s infinite alternate;}
+.mcard.playing .mc-bar:nth-child(3){animation:barB 0.5s ease 0.2s infinite alternate;}
+.mcard.playing .mc-bar:nth-child(4){animation:barB 0.5s ease 0.3s infinite alternate;}
+@keyframes barB { from{height:4px;} to{height:16px;} }
+.mc-fav { position:absolute; top:0.55rem; right:0.6rem; font-size:0.7rem; color:var(--burgundy); opacity:0.55; }
+.mc-title  { font-family:'Cormorant Garamond',serif; font-weight:600; font-size:0.8rem; color:#1a1a1a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.mc-artist { font-family:'Cormorant Garamond',serif; font-size:0.7rem; color:#888; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:0.48rem; }
+.mc-bar-w { height:3px; background:#ddd; border-radius:2px; margin-bottom:0.28rem; overflow:hidden; }
+.mc-bar-f { height:100%; width:0%; background:linear-gradient(90deg,var(--burgundy),var(--gold)); border-radius:2px; transition:width 0.4s linear; }
+.mc-time { display:flex; justify-content:space-between; font-family:monospace; font-size:0.56rem; color:#bbb; margin-bottom:0.5rem; }
+.mc-ctrls { display:flex; align-items:center; justify-content:space-between; padding:0 0.1rem; }
+.mc-btn { background:none; border:none; cursor:pointer; color:#777; font-size:0.7rem; padding:0.2rem; transition:color 0.2s,transform 0.1s; display:flex; align-items:center; }
+.mc-btn:active { transform:scale(0.9); }
+.mc-play {
+  width:33px; height:33px;
+  background:linear-gradient(135deg,var(--deep-red),var(--burgundy));
+  color:white !important; border-radius:50%; font-size:0.82rem;
+  box-shadow:0 4px 14px rgba(107,26,42,0.4);
+  display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;
+}
+.mcard.playing .mc-play { background:linear-gradient(135deg,#C4566A,var(--deep-red)); }
+.swipe-hint {
+  font-family:'Dancing Script',cursive; color:rgba(222,196,154,0.35);
+  font-size:0.8rem; letter-spacing:0.05em; opacity:0; flex-shrink:0;
+}
+.swipe-hint.animate { animation: fadeInUp 0.6s ease 0.9s forwards; }
+
+/* PAGE 5 - VIDEO */
+#page-video { flex-direction: column; gap: 1.5rem; }
+.video-title { font-family:'Dancing Script',cursive; color:var(--kraft-light); font-size:1.8rem; opacity:0; }
+.video-title.animate { animation: fadeInDown 0.6s ease 0.2s forwards; }
+.video-frame {
+  background: var(--warm-white); padding: 0.8rem 0.8rem 3rem;
+  max-width: 500px; width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5); transform: rotate(-1deg); opacity: 0;
+}
+.video-frame.animate { animation: slideUp 0.8s ease 0.4s forwards; }
+.video-container {
+  width:100%; aspect-ratio:16/9; background:#000;
+  position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.video-container video { width:100%; height:100%; object-fit:cover; }
+.video-placeholder {
+  width:100%; height:100%;
+  background:linear-gradient(135deg,var(--burgundy),var(--deep-red));
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:1rem; color:var(--kraft-light); font-family:'Cormorant Garamond',serif;
+}
+.video-placeholder .play-icon { font-size:3rem; }
+.video-note { text-align:center; font-family:'Dancing Script',cursive; color:var(--burgundy); font-size:0.9rem; margin-top:0.5rem; }
+
+/* NAV BUTTON */
+.nav-btn {
+  position:fixed; bottom:2.5rem; right:2rem; z-index:100;
+  background:var(--burgundy); color:var(--kraft-light);
+  border:2px solid var(--kraft); font-family:'Cormorant Garamond',serif;
+  font-size:1rem; letter-spacing:0.1em; padding:0.7rem 1.8rem;
+  cursor:pointer; border-radius:2px; display:none;
+  box-shadow:0 5px 20px rgba(0,0,0,0.4); transition:all 0.3s ease;
+}
+.nav-btn.visible { display:block; animation:fadeInUp 0.5s ease forwards; }
+.nav-btn:hover { background:var(--kraft); color:var(--burgundy); transform:translateY(-2px); }
+
+/* PROGRESS DOTS */
+.progress-dots {
+  position:fixed; bottom:2.5rem; left:50%; transform:translateX(-50%);
+  display:flex; gap:0.5rem; z-index:100;
+}
+.dot { width:8px; height:8px; border-radius:50%; background:rgba(200,169,122,0.3); transition:all 0.3s ease; }
+.dot.active { background:var(--kraft); transform:scale(1.3); }
+
+/* GLOBAL KEYFRAMES */
+@keyframes fadeInDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeInUp   { from{opacity:0;transform:translateY(20px);}  to{opacity:1;transform:translateY(0);} }
+@keyframes slideUp    { from{opacity:0;transform:translateY(30px);}  to{opacity:1;transform:translateY(0);} }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsContainer"></div>
+<div class="confetti-container" id="confettiContainer"></div>
+<div class="progress-dots" id="progressDots"></div>
+<button class="nav-btn" id="navBtn" onclick="nextPage()">Next →</button>
+
+<!-- PAGE 1: ENVELOPE -->
+<div class="page active" id="page-envelope">
+  <div class="envelope-scene" id="envelopeScene" onclick="openEnvelope()">
+
+  <img src="/1.png" class="real-envelope">
+
+</div>
+</div>
+<!-- PAGE 2: HAPPY BIRTHDAY -->
+<div class="page" id="page-birthday">
+  <div class="content">
+    <h1 class="birthday-title" id="bdayTitle">Happy Birthday</h1>
+    <p class="birthday-name" id="bdayName">My Love 💕</p>
+    <div class="cake-wrapper" id="cakeWrapper">
+      <svg class="cake-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="100" cy="140" rx="75" ry="20" fill="#C8A97A"/>
+        <rect x="25" y="110" width="150" height="30" rx="3" fill="#DEC49A"/>
+        <rect x="30" y="90" width="140" height="25" rx="3" fill="#F5EDD8"/>
+        <rect x="35" y="70" width="130" height="25" rx="3" fill="#C8A97A"/>
+        <ellipse cx="100" cy="70" rx="65" ry="15" fill="#DEC49A"/>
+        <circle cx="80" cy="55" r="8" fill="#8B2535" class="flame"/>
+        <circle cx="100" cy="50" r="9" fill="#FF6B35" class="flame"/>
+        <circle cx="120" cy="55" r="8" fill="#8B2535" class="flame"/>
+        <ellipse cx="80" cy="52" rx="4" ry="7" fill="#FFD700"/>
+        <ellipse cx="100" cy="47" rx="4" ry="7" fill="#FFD700"/>
+        <ellipse cx="120" cy="52" rx="4" ry="7" fill="#FFD700"/>
+      </svg>
+    </div>
+    <p style="font-family:'Dancing Script',cursive;color:var(--kraft-light);font-size:1rem;opacity:0;animation:slideUp 1s ease 1s forwards;">
+      Today is all about you ✨
+    </p>
+  </div>
+</div>
+
+<!-- PAGE 3: LETTER -->
+<div class="page" id="page-letter">
+  <div class="letter-paper" id="letterPaper">
+    <p class="letter-date" id="letterDate"></p>
+    <div class="letter-body">
+  <p>
+    happy birthday AkhilaaaMY PREETTYYY this is so small message im writing for you heheh i lovee youu soo much babyyy and i wish your all wishes come true okay I wish I could come to hyderabad we would have celebrated your birthday like you wish i'm soo sorry this time  also didn't come i'm sorry babyy and i only have this small gift which made for you and thank you coming in to my life and making me happyy ❤️
+  </p>
+</div>
+  </div>
+</div>
+
+<!-- PAGE 4: MUSIC CARDS -->
+<div class="page" id="page-photos">
+  <p class="photos-title" id="photosTitle">Our Songs 🎵</p>
+  <p class="photos-sub" id="photosSub">tap a card to play</p>
+  <div class="music-scroll" id="musicScroll"></div>
+  <p class="swipe-hint" id="swipeHint">← swipe to see more →</p>
+</div>
+
+  <!-- PAGE 5: VIDEO -->
+<div class="page" id="page-video">
+  <p class="video-title" id="videoTitle">A Little Something Extra 🎬</p>
+  <div class="video-frame" id="videoFrame">
+    <div class="video-container">
+  <video controls autoplay muted loop>
+    <source src="/video.mp4" type="video/mp4">
+  </video>
+</div>
+    <p class="video-note">with all my love 💕</p>
+  </div>
+</div>
+
+<script>
+const HER_NAME = "My Love"; // ← Change to her name
+
+const MEMORIES = [
+  { photo:"/photo 1 .jpg", song:"/song 1.mp3", title:"Tum se hi",       artist:"Pritam"  },
+  { photo:"/photo 2.jpg", song:"/song 2.mp3", title:"peera ho",           artist:"masuma anwar "        },
+  { photo:"/image 3.jpg", song:"/song3.mp3", title:"oh My Angel",         artist:"❤️"  },
+  { photo:"/image 4.jpg", song:"/aong 4.mp3", title:"gosh she looks pretty",  artist:"Nato kitch "   },
+  { photo:"/image 5.jpg", song:"/song 5 .mp3", title:"kiss me ",      artist:"Sixpence None The Richer"  },
+  { photo:"/image 6.jpg", song:"/song 6.mp3", title:"kalank ", artist:"Arijit Singh"    },
+  { photo:"/7.jpg", song:"/song7.mp3", title:"Affection",         artist:"Cigarettes After Sex"  },
+  { photo:"/image 8.jpg", song:"/song8.mp3", title:"Kesariya",      artist:"Arijit Singh"  },
+];
+
+const pages = ['page-envelope','page-birthday','page-letter','page-photos','page-video'];
+let currentPage = 0;
+let currentAudio = null;
+let currentCardIndex = -1;
+let audioProgressInterval = null;
+
+// Set name & date
+document.getElementById('bdayName').textContent = HER_NAME + ' 💕';
+document.getElementById('letterDate').textContent =
+  new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+
+// ============ FLOATING HEARTS BACKGROUND ============
+function createFloatingHearts() {
+  const container = document.getElementById('heartsContainer');
+  const hearts = ['♥','❤','♡','❣','♡'];
+  for (let i = 0; i < 100; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'heart-float';
+    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+    heart.style.left = Math.random() * 100 + '%';
+    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+    heart.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    heart.style.animationDelay = Math.random() * 10 + 's';
+    heart.style.opacity = Math.random() * 0.3;
+    container.appendChild(heart);
+  }
+}
+
+// ============ ENVELOPE HEARTS ============
+function createEnvelopeHearts() {
+  const container = document.getElementById('envHearts');
+  for (let i = 0; i < 8; i++) {
+    const heart = document.createElement('span');
+    heart.className = 'env-heart';
+    heart.textContent = '♥';
+    heart.style.left = (Math.random() * 80 + 10) + '%';
+    heart.style.top = (Math.random() * 80 + 10) + '%';
+    container.appendChild(heart);
+  }
+}
+
+// ============ BUILD MUSIC CARDS ============
+function buildMusicCards() {
+  const scroll = document.getElementById('musicScroll');
+  MEMORIES.forEach((mem, i) => {
+    const card = document.createElement('div');
+    card.className = 'mcard';
+    card.setAttribute('data-index', i);
+    card.onclick = () => toggleC(i);
+    card.innerHTML = `
+      <div class="mc-photo">
+        ${mem.photo ? `<img src="${mem.photo}" alt="${mem.title}">` : '🎵'}
+        <div class="mc-bars">
+          <div class="mc-bar"></div><div class="mc-bar"></div>
+          <div class="mc-bar"></div><div class="mc-bar"></div>
+        </div>
+      </div>
+      <div class="mc-fav">♥</div>
+      <div class="mc-title">${mem.title}</div>
+      <div class="mc-artist">${mem.artist}</div>
+      <div class="mc-bar-w"><div class="mc-bar-f" id="progress-${i}"></div></div>
+      <div class="mc-time"><span id="current-${i}">0:00</span><span id="duration-${i}">0:00</span></div>
+      <div class="mc-ctrls">
+        <button class="mc-btn" onclick="event.stopPropagation();">♡</button>
+        <button class="mc-btn mc-play" id="playBtn-${i}">▶</button>
+        <button class="mc-btn" onclick="event.stopPropagation();">⋮</button>
+      </div>
+    `;
+    scroll.appendChild(card);
+  });
+}
+
+// ============ BUILD PROGRESS DOTS ============
+function buildProgressDots() {
+  const container = document.getElementById('progressDots');
+  pages.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.id = 'dot-' + i;
+    container.appendChild(dot);
+  });
+}
+
+// ============ CONFETTI ============
+function spawnConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#C8A97A','#8B2535','#DEC49A','#C9963A','#F5EDD8','#6B1A2A','#FDF6EC'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    piece.style.animationDelay = Math.random() * 1.5 + 's';
+    piece.style.width = (Math.random() * 10 + 5) + 'px';
+    piece.style.height = (Math.random() * 10 + 5) + 'px';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 4000);
+  }
+}
+
+// ============ PAGE NAVIGATION ============
+function goToPage(n) {
+  pages.forEach(p => {
+    const el = document.getElementById(p);
+    el.classList.remove('active');
+  });
+  
+  const target = document.getElementById(pages[n]);
+  target.classList.add('active');
+  currentPage = n;
+  
+  document.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === n);
+  });
+  
+  const navBtn = document.getElementById('navBtn');
+  if (n === 0) {
+    navBtn.classList.remove('visible');
+  } else if (n === pages.length - 1) {
+    navBtn.classList.add('visible');
+    navBtn.textContent = '🔄 Replay';
+  } else {
+    navBtn.classList.add('visible');
+    navBtn.textContent = 'Next →';
+  }
+  
+  if (n === 1) {
+    setTimeout(() => {
+      document.getElementById('bdayTitle').classList.add('animate');
+      document.getElementById('bdayName').classList.add('animate');
+      document.getElementById('cakeWrapper').classList.add('animate');
+    }, 200);
+    spawnConfetti();
+  }
+  
+  if (n === 2) {
+    setTimeout(() => {
+      document.getElementById('letterPaper').classList.add('animate');
+    }, 200);
+  }
+  
+  if (n === 3) {
+    setTimeout(() => {
+      document.getElementById('photosTitle').classList.add('animate');
+      document.getElementById('photosSub').classList.add('animate');
+      document.querySelectorAll('.mcard').forEach((card, i) => {
+        setTimeout(() => card.classList.add('animate'), i * 100);
+      });
+      document.getElementById('swipeHint').classList.add('animate');
+    }, 200);
+  }
+  
+  if (n === 4) {
+    setTimeout(() => {
+      document.getElementById('videoTitle').classList.add('animate');
+      document.getElementById('videoFrame').classList.add('animate');
+    }, 200);
+  }
+}
+
+// ============ ENVELOPE OPEN ============
+function openEnvelope() {
+  const envelope = document.getElementById('envelopeScene');
+  envelope.classList.add('opening');
+  setTimeout(() => {
+    goToPage(1);
+    envelope.classList.remove('opening');
+  }, 700);
+}
+
+// ============ NEXT PAGE / REPLAY ============
+function nextPage() {
+  if (currentPage >= pages.length - 1) {
+    stopAllAudio();
+    goToPage(0);
+    document.querySelectorAll('.birthday-title, .birthday-name, .cake-wrapper, .letter-paper, .photos-title, .photos-sub, .mcard, .swipe-hint, .video-title, .video-frame').forEach(el => {
+      el.classList.remove('animate');
+    });
+  } else {
+    goToPage(currentPage + 1);
+  }
+}
+
+// ============ AUDIO CONTROLS ============
+function fmt(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+function stopAllAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  if (audioProgressInterval) {
+    clearInterval(audioProgressInterval);
+    audioProgressInterval = null;
+  }
+  document.querySelectorAll('.mcard').forEach(c => c.classList.remove('playing'));
+  document.querySelectorAll('.mc-bar-f').forEach(b => b.style.width = '0%');
+  document.querySelectorAll('[id^="playBtn-"]').forEach(b => b.textContent = '▶');
+  document.querySelectorAll('[id^="current-"]').forEach(t => t.textContent = '0:00');
+  currentCardIndex = -1;
+}
+
+function toggleC(i) {
+  const card = document.querySelector(`.mcard[data-index="${i}"]`);
+  const playBtn = document.getElementById('playBtn-' + i);
+  
+  if (currentCardIndex === i && currentAudio && !currentAudio.paused) {
+    currentAudio.pause();
+    card.classList.remove('playing');
+    playBtn.textContent = '▶';
+    clearInterval(audioProgressInterval);
+    return;
+  }
+  
+  if (currentCardIndex === i && currentAudio && currentAudio.paused) {
+    currentAudio.play();
+    card.classList.add('playing');
+    playBtn.textContent = '⏸';
+    startProgressUpdate(i);
+    return;
+  }
+  
+  stopAllAudio();
+  document.querySelectorAll('.mcard').forEach(c => c.classList.remove('playing'));
+  document.querySelectorAll('[id^="playBtn-"]').forEach(b => b.textContent = '▶');
+  
+  const mem = MEMORIES[i];
+  
+  if (mem.song) {
+    currentAudio = new Audio(mem.song);
+  } else {
+    currentAudio = new Audio();
+    console.log('No audio file for: ' + mem.title + ' - Add song path to MEMORIES array');
+  }
+  
+  currentCardIndex = i;
+  
+  currentAudio.addEventListener('loadedmetadata', () => {
+    document.getElementById('duration-' + i).textContent = fmt(currentAudio.duration);
+  });
+  
+  currentAudio.addEventListener('ended', () => {
+    card.classList.remove('playing');
+    playBtn.textContent = '▶';
+    document.getElementById('progress-' + i).style.width = '0%';
+    document.getElementById('current-' + i).textContent = '0:00';
+    clearInterval(audioProgressInterval);
+    currentCardIndex = -1;
+  });
+  
+  currentAudio.play().then(() => {
+    card.classList.add('playing');
+    playBtn.textContent = '⏸';
+    startProgressUpdate(i);
+    if (currentAudio.duration) {
+      document.getElementById('duration-' + i).textContent = fmt(currentAudio.duration);
+    }
+  }).catch(e => {
+    console.log('Audio playback requires user interaction or valid audio file');
+    simulateProgress(i);
+    card.classList.add('playing');
+    playBtn.textContent = '⏸';
+  });
+}
+
+function startProgressUpdate(i) {
+  clearInterval(audioProgressInterval);
+  audioProgressInterval = setInterval(() => {
+    if (currentAudio && currentAudio.duration && currentCardIndex === i) {
+      const progress = (currentAudio.currentTime / currentAudio.duration) * 100;
+      document.getElementById('progress-' + i).style.width = progress + '%';
+      document.getElementById('current-' + i).textContent = fmt(currentAudio.currentTime);
+    }
+  }, 200);
+}
+
+function simulateProgress(i) {
+  let simTime = 0;
+  const simDuration = 30;
+  document.getElementById('duration-' + i).textContent = fmt(simDuration);
+  
+  clearInterval(audioProgressInterval);
+  audioProgressInterval = setInterval(() => {
+    if (currentCardIndex === i && currentAudio && !currentAudio.paused) {
+      simTime += 0.2;
+      if (simTime >= simDuration) {
+        clearInterval(audioProgressInterval);
+        simTime = 0;
+        document.getElementById('progress-' + i).style.width = '0%';
+        document.getElementById('current-' + i).textContent = '0:00';
+        const card = document.querySelector(`.mcard[data-index="${i}"]`);
+        if (card) card.classList.remove('playing');
+        document.getElementById('playBtn-' + i).textContent = '▶';
+        return;
+      }
+      const progress = (simTime / simDuration) * 100;
+      document.getElementById('progress-' + i).style.width = progress + '%';
+      document.getElementById('current-' + i).textContent = fmt(simTime);
+    }
+  }, 200);
+}
+
+// ============ INITIALIZATION ============
+window.addEventListener('DOMContentLoaded', () => {
+  createFloatingHearts();
+  
+  buildMusicCards();
+  buildProgressDots();
+  goToPage(0);
+});
+</script>
+</body>
+</html>
